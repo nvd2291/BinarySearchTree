@@ -1,0 +1,154 @@
+Title: HW3: BinarySearchTrees
+Author: Naveed Naeem 
+UTLN: nnaeem01
+Date: 7/14/2023
+
+Purpose: 
+----------------------
+The Purpose of the this program is to allow the user to easily create a Binary
+Search Tree (BST) that supports a multiset. This a allows the implemented BST
+to contain duplicates. If an element is to be inserted in the BST and a node
+containing the desired value already exists, the count value of the associated
+node is incremented. If a node is to be removed and its value is greater than
+one, its count value is decremented. If a node to be removed has a count that
+is one then the node is removed from the BST and the BST Nodes will re-adjust.
+
+Acknowledgements: 
+----------------------
+    Web Resources:
+        - https://www.youtube.com/watch?v=uEUXGcc2VXM
+        - https://www.geeksforgeeks.org/deletion-in-binary-search-tree/
+        Shortened link to StackOverflow page about random number generation:
+        - https://rb.gy/m5pdi
+
+Estimated Time Taken:
+----------------------
+    - Approximately 14 hours
+
+Files Provided:
+----------------------
+    - BinarySearchTree.h: 
+        - Contains the class definition for the BinarySearch Tree and all the
+        function contracts for the public method definitions
+        - Contains the private method function definitions that I wrote myself
+
+    - BinarySearchTree.cpp:
+        - Contains all the public method definitions and the private method
+        definitions for the provided private helper functions used to implement
+        their public counterparts.
+    
+    - unit_tests.cpp:
+        - Contains the unit tests that were written to verify the functionality
+          of each public method function. All private functions are testing 
+          implicitly.
+        - Each tests contains a brief description of what it's testing
+    
+    - Makefile:
+        - Contains the instructions the compiler needs to use in order to
+        build the different parts of the program.
+        - Allows the user to build the bst program or the unit_tests program
+    
+    - README: 
+        - THIS file. Contains answers to all the questions asked in the README
+        Outline
+    
+How to Compile and Run:
+----------------------
+    - In the terminal open in the project directory:
+        - make 
+        - To run: ./bst
+
+        - make unit_tests
+            - To Run: ./unit_tests   
+
+    - The Makefile has several options for what it should build. Take a look
+      there for how to build certain items.
+
+Data Structures Outline:
+----------------------
+
+    - Binary Search Tree:
+        The binary search tree in this program is implement through the use 
+        of Node structs. Each node contains an int name count that contains the
+        number of times a value has been insert in the tree, an int named data
+        that stores the value of the node, and two pointers to a Node struct
+        representing the left and right child nodes of the struct.
+
+        The binary search tree will insert a new node if the value to be
+        inserted is not currently in the tree, if the value already exists in
+        the tree the count of the node will be incremented. 
+
+        If the tree is empty then the first node inserted will be the root
+        node.
+        
+        When inserting a new node, if the value is less than the root node
+        then the insert function will recursively call insert on the left
+        side of the tree until it finds the locations where it should be
+        inserted. If the value is greater than the value of the root node then
+        the same recursive call on insert happens but on the right side of the
+        tree. 
+
+        When removing a node, the remove function will recursively call
+        itself until it finds the node value. The count value will be
+        decremented. If at this point the count drops to 0 the node will be
+        removed. The value and count of the node to be removed will be 
+        reassigned to the value and count of the node that will replace it,
+        then the remove function will be recursively called on the right side
+        of the tree with the new value to be removed is the value of the 
+        successor. This will continuosly push the node down the tree until
+        it becomes a leaf node and can be easily removed.
+
+Testing Methodology:
+----------------------
+    - For testing, in general I tested all the public function methods using
+    empty trees, single node trees, and larger trees with multiple nodes.
+    For the more complicated functions such as insert and remove, I followed
+    the same methodology but inserted a lot of random numbers, inserted a
+    lot of duplicates and verified the count_total and node_count made sense
+    in each case. Likewise for remove, but I tested removing leaf nodes,
+    nodes with one child (both left and right), nodes with left and right 
+    nodes, and the root node to make sure that it's functioning as intended.
+    My tests are all contained within the unit_tests.cpp file. All private
+    functions are tested impicitly through calling their public counterparts.
+    For the class destructor I used valgrind to confirm that no memory leaks
+    or errors occurred.
+    I think tested to reconfirm that my program's output when diff'd with the
+    reference program results in no descrepancies.
+
+
+Questions:
+----------------------
+
+1. Yes, my implementation will use the privately defined find_min() function 
+   to find the node with the minimum value of right branch of the node that
+   will be removed. I use the node returned to replace the values of the 
+   current node. Then I call remove recursively on the right branch of the
+   node to remove, using the value of the Node returned by find_min()
+2. No, the find_min and find_max private functions cannot return a node that
+   is not a valid node unless the node inputted is already nullptr. If the
+   left Child node is nullptr for find_min then the Node itself will be
+   returned. Likewise if the right Child node is nullptr for find_max
+3. b.) If find_min() is called on node with value 5 then the node itself will
+   be returned.
+4. 
+    find_min(node):
+    if node is nullptr: return nullptr
+    if node.leftChild != nullptr:
+        return find_mind(node.leftChild)
+    else:
+        return node
+5. 
+    find_max(node):
+    if node is nullptr: return nullptr
+    if node.rightChild != nullptr:
+        return find_mind(node.rightChild)
+    else:
+        return node
+6. post_order_delete(node):
+    if node is nullptr -> return
+
+    post_order_delete(node.leftChild)
+    post_order_delete(node.rightChild)
+    free the current node from the heap
+    set node = nullptr
+    exit
